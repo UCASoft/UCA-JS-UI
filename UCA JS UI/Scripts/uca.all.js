@@ -4,7 +4,7 @@
 
         _togglePanel: function (panel, style) {
             panel.toggleClass("panel-primary panel-success");
-            $(".accordion-body", panel).toggle(style);
+            panel.children(".accordion-body").toggle(style);
         },
 
         _init: function (element, options) {
@@ -31,11 +31,12 @@
                     }
                 }
             }
+            var panels = $element.children(".accordion-panel");
 
-            $(".accordion-panel", $element).each(function () {
+            panels.each(function () {
                 var panel = $(this);
                 panel.addClass("panel");
-                var header = $(".accordion-header", panel);
+                var header = panel.children(".accordion-header");
                 header.addClass("panel-heading");
                 header.children().addClass("panel-title");
                 if (panel.hasClass("disabled")) {
@@ -44,17 +45,17 @@
                     panel.addClass("panel-success");
                     header.click(function () {
                         if (!panel.hasClass("panel-primary")) {
-                            self._togglePanel($(".panel-primary", $element), "slow");
+                            self._togglePanel($element.children(".panel-primary"), "slow");
                             self._togglePanel(panel, "slow");
                         }
                     });
                 }
-                var body = $(".accordion-body", panel);
+                var body = panel.children(".accordion-body");
                 body.addClass("panel-body");
             });
 
             var maxHeight = 0;
-            var bodies = $(".accordion-body", $element);
+            var bodies = panels.children(".accordion-body");
             bodies.each(function () {
                 var $this = $(this);
                 if (maxHeight < $this.height()) {
@@ -63,20 +64,22 @@
             });            
 
             if ($element.hasClass("accordion-horizontal")) {
-                $(".accordion-panel", $element).not(0).css("margin-top", "-2px");
-                var headers = $(".accordion-header", $element);
+                panels.not(0).css("margin-top", "-2px");
+                var headers = panels.children(".accordion-header");
+                var div = $("<div style=\"overflow-x: auto;\"></div>");
+                var span = $("<span></span>");
+                div.append(span);
+                $element.append(div);
                 headers.children().each(function () {
-                    var $this = $(this);
-                    var span = $("<span></span>");
-                    span.text($this.text());
-                    $element.append(span);
+                    var $this = $(this);                    
+                    span.text($this.text());                    
                     if (maxHeight < span.width() + 10) {
                         maxHeight = span.width() + 10;
                     }
-                    span.remove();
                 });
+                div.remove();
                 headers.height(maxHeight + 10);
-                $(".panel-title", $element).each(function () {
+                headers.children(".panel-title").each(function () {
                     var $this = $(this);
                     $this.html($.trim($this.text()).replace(/\s/g, "&nbsp;"));
                 });
@@ -94,9 +97,9 @@
 
             bodies.css("display", "none");
 
-            var started = $(".accordion-panel[aria-expanded = 'true']", $element);
+            var started = $element.children(".accordion-panel[aria-expanded = 'true']");
             if (started.length === 0) {
-                started = $(".accordion-panel", $element).first();
+                started = panels.first();
             }
 
             this._togglePanel(started);
@@ -104,13 +107,14 @@
 
         changeEnabled: function (element, options) {
             var self = this;
-            var panel = $(".accordion-panel", element).eq(options.index);
-            var header = $(".accordion-header", panel);
+            var $element = $(element);
+            var panel = $element.children(".accordion-panel").eq(options.index);
+            var header = panel.children(".accordion-header");
             if (options.enabled) {
                 panel.removeClass("panel-default disabled").addClass("panel-success");
                 header.click(function () {
                     if (!panel.hasClass("panel-primary")) {
-                        self._togglePanel($(".panel-primary", element), "slow");
+                        self._togglePanel($element.children(".panel-primary"), "slow");
                         self._togglePanel(panel, "slow");
                     }
                 });

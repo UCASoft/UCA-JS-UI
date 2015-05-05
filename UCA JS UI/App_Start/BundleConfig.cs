@@ -24,6 +24,8 @@ namespace UCA_JS_UI
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css", "~/Content/bootstrap-theme.css"));
 
             bundles.Add(new StyleBundle("~/Content/uca").Include("~/Content/uca.all.css"));
+
+            bundles.Add(new StyleBundle("~/Content/ucaold").Include("~/Content/uca.all.old.css"));
         }
     }
 }

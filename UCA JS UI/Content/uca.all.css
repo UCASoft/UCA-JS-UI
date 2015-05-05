@@ -8,6 +8,7 @@
 }
 
 .accordion-horizontal .panel-title {
+
     -webkit-transform: rotate(-90deg) translateX(-700%);
     -moz-transform: rotate(-90deg) translateX(-700%);
     -ms-transform: rotate(-90deg) translateX(-700%);
