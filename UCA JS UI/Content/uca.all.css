@@ -1,0 +1,16 @@
+﻿.accordion-horizontal .accordion-panel, .accordion-horizontal .accordion-body {
+    float: left;
+}
+
+.accordion-horizontal .accordion-header {
+    float: left;
+    width: 55px;
+}
+
+.accordion-horizontal .panel-title {
+    -webkit-transform: rotate(-90deg) translateX(-700%);
+    -moz-transform: rotate(-90deg) translateX(-700%);
+    -ms-transform: rotate(-90deg) translateX(-700%);
+    -o-transform: rotate(-90deg) translateX(-700%);
+    transform: rotate(-90deg) translateX(-700%);
+}

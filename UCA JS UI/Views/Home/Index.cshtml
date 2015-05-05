@@ -1,0 +1,131 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UCA JS UI Example</title>
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/uca")
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-10 col-xs-push-1">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Wellcom to UCA JS UI example site</h4>
+            </div>
+            <div class="panel-body">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Accordion
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    Result
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="accordion">
+                                    <div class="accordion-panel">
+                                        <div class="accordion-header">
+                                            <h4>
+                                                Header from html
+                                            </h4>
+                                        </div>
+                                        <div class="accordion-body">
+                                            <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html!'); "></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion accordion-horizontal">
+                                    <div class="accordion-panel">
+                                        <div class="accordion-header">
+                                            <h4>
+                                                Horizontal header from html
+                                            </h4>
+                                        </div>
+                                        <div class="accordion-body">
+                                            <div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html and my header is horizontal!');"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    Code
+                                </h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            html
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <pre>
+                                            <code class="html">
+                                                &lt;div class="accordion"&gt;
+                                                &nbsp;&nbsp;&lt;div class="accordion-panel"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="accordion-header"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;Header from html&lt;/h4&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="accordion-body"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html!');">&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+                                                &nbsp;&nbsp;&lt;/div&gt;
+                                                &lt;/div&gt;
+                                                &lt;div class="accordion accordion-horizontal"&gt;
+                                                &nbsp;&nbsp;&lt;div class="accordion-panel"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="accordion-header"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;Horizontal header from html&lt;/h4&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="accordion-body"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html and my header is horizontal!');"&gt;&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+                                                &nbsp;&nbsp;&lt;/div&gt;
+                                                &lt;/div&gt;
+                                            </code>
+                                        </pre>
+                                    </div>
+                                </div>
+                                <div class="panel">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            javascript
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <pre>
+                                            <code class="jQuery">
+                                                $(".accordion").accordion({items: [{header: "Header from options", body: "&lt;div style="width: 100px; height: 100px; background-color: red;" onclick="alert('I was added from options!');"&gt;&lt;/div&gt;"}]});
+                                            </code>
+                                        </pre>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    @Scripts.Render("~/bundle/jquery")
+    @Scripts.Render("~/bundle/bootstrap")
+    @Scripts.Render("~/bundle/uca")
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+    <script type="text/javascript">
+        hljs.initHighlightingOnLoad();
+        $(".accordion").accordion({items: [{header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>"}]});
+    </script>
+</body>
+</html>
