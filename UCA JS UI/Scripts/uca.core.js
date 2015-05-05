@@ -22,19 +22,21 @@
         $.fn[name] = function (options, args) {
             return this.each(function () {
                 var $this = $(this);
+                var action = typeof options == "string";
                 var data = $this.data(name);
                 if (!data) {
-                    var instance = new object();
-                    instance.options = $.extend({}, instance.options, options);
-                    $this.data(name, instance);
-                    instance._init(this, instance.options);
-                } else {
-                    if (options && typeof options == "string") {
-                        data[options](this, args);
-                    } else {
-                        $.extend(data.options, options);
-                    }
+                    data = new object();
+                    if (!action)
+                        data.options = $.extend({}, data.options, options);
+                    $this.data(name, data);
+                    data._init(this, data.options);
                 }
+                if (action) {
+                    data[options](this, args);
+                } else {
+                    $.extend(data.options, options);
+                }
+
             });
         }
     }

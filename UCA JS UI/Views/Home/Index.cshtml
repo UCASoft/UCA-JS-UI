@@ -47,7 +47,7 @@
                                                 </h4>
                                             </div>
                                             <div class="accordion-body">
-                                                <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html!'); "></div>
+                                                <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html!'); "></div>                                                
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,10 @@
                                                 </h4>
                                             </div>
                                             <div class="accordion-body">
-                                                <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html and my header is horizontal!'); "></div>
+                                                <div class="row center-block">
+                                                    <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html and my header is horizontal!'); "></div>
+                                                    <button type="button" class="btn btn-success" style="margin-top: 5px;" onclick="enablePanel(this)">Enabled second panel</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +100,10 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;Horizontal header from html&lt;/h4&gt;
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="accordion-body"&gt;
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html and my header is horizontal!');"&gt;&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="row center-block"&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html and my header is horizontal!');"&gt;&lt;/div&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type="button" class="btn btn-success" style="margin-top: 5px;" onclick="enablePanel(this)"&gt;Enabled second panel&lt;/button&gt;
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
                                                 &nbsp;&nbsp;&lt;/div&gt;
                                                 &lt;/div&gt;
@@ -114,7 +120,12 @@
                                         <div class="panel-body">
                                             <pre>
                                             <code class="jQuery">
-                                                $(".accordion").accordion({items: [{header: "Header from options", body: "&lt;div style="width: 100px; height: 100px; background-color: red;" onclick="alert('I was added from options!');"&gt;&lt;/div&gt;"}]});
+                                                $(".accordion").accordion("addItems", [{header: "Header from options", body: "&lt;div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"&gt;&lt;/div&gt;"}]).accordion("changeEnabled", {index: 1, enabled: false});
+                                                function enablePanel(button) {
+                                                    var $button = $(button);
+                                                    var accordion = $button.closest(".accordion");
+                                                    accordion.accordion("changeEnabled", { index: 1, enabled: true });
+                                                }
                                             </code>
                                         </pre>
                                         </div>
@@ -143,8 +154,13 @@
     @Scripts.Render("~/bundle/bootstrap")
     @Scripts.Render("~/bundle/uca")
     <script type="text/javascript">
-        $(".accordion").not(function (index) { return index == 0; }).accordion({ items: [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }] });
-        setTimeout(function(){$(".accordion").eq(0).accordion();}, 0);
+        $(".accordion").not(function (index) { return index == 0; }).accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", {index: 1, enabled: false});
+        setTimeout(function () { $(".accordion").eq(0).accordion(); }, 0);
+        function enablePanel(button) {
+            var $button = $(button);
+            var accordion = $button.closest(".accordion");
+            accordion.accordion("changeEnabled", { index: 1, enabled: true });
+        }
     </script>
 </body>
 </html>
