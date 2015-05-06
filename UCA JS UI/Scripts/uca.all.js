@@ -36,12 +36,18 @@
                     $this.html($.trim($this.text()).replace(/\s/g, "&nbsp;"));
                 });
                 var maxWidth = 0;
-                bodies.each(function () {
-                    var $this = $(this);
-                    if (maxWidth < $this.width()) {
-                        maxWidth = $this.width();
-                    }
-                });
+                var data = $element.data("accordion");
+                if (data && data.options.width === "fill_parent") {
+                    var headersWidth = headers.length * (headers.width() + 50);
+                    maxWidth = $element.parent().width() - headersWidth;
+                } else {                    
+                    bodies.each(function () {
+                        var $this = $(this);
+                        if (maxWidth < $this.width()) {
+                            maxWidth = $this.width();
+                        }
+                    });
+                }
                 bodies.width(maxWidth);
             }
 
@@ -72,7 +78,9 @@
                 body.addClass("panel-body");
             });
 
-            this._resize(element);
+            setTimeout(function () {
+                self._resize(element);
+            }, 50);
         },
 
         _togglePanel: function (panel, style) {
@@ -105,6 +113,9 @@
             }
 
             this._togglePanel(started);
+            $(window).resize(function () {
+                self._resize($element);
+            });
         },
 
         changeEnabled: function (element, options) {
@@ -148,7 +159,8 @@
 
         options: {
             orientation: "vertical",
-            items: []
+            items: [],
+            width: "fill_parent"
         }
     });
 
