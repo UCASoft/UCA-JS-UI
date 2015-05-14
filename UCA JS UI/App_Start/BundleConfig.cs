@@ -17,6 +17,8 @@ namespace UCA_JS_UI
         {
             bundles.Add(new ScriptBundle("~/bundle/jquery").Include("~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundle/angular").Include("~/Scripts/angular.js"));
+
             bundles.Add(new ScriptBundle("~/bundle/bootstrap").Include("~/Scripts/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundle/uca").Include("~/Scripts/uca.core.js", "~/Scripts/uca.all.js"));

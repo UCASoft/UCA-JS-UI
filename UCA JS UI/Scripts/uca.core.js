@@ -2,6 +2,22 @@
 
     $.uca = $.uca || {};
 
+    $.uca.angular = {
+
+        _isConnected: function () {
+            return angular && true;
+        },
+
+        _compile: function (element) {
+            if (this._isConnected()) {
+                angular.element(element).injector().invoke(function ($compile) {
+                    var scope = angular.element(element).scope();
+                    $compile(element)(scope);
+                });
+            }
+        }
+    }
+
     $.uca.control = function () {
         this._init = function () {};
         this.options = {};
@@ -11,7 +27,7 @@
         name = name.split(".");
         var superclass = this;
         var childclass = function () {
-            this._super = superclass;
+            this._super = new superclass();
         }
         childclass.prototype = $.extend(true, {}, new this(), object);
         childclass.subclass = subclass;
