@@ -7,12 +7,12 @@
                 var a = $(this);
                 ul.add("li a").removeClass("selected");
                 a.addClass("selected");
-                if ($.uca.angular._isConnected()) {
-                    input.keydown();
-                    hidden.keydown();
-                }
                 input.val(a.text());
                 hidden.val(a.attr("value"));
+                if ($.uca.angular._isConnected()) {
+                    input.change();
+                    hidden.change();
+                }
                 var item = data.items[a.attr("value")];
                 if (data.seletedItem !== item) {
                     data.seletedItem = item;
@@ -43,7 +43,7 @@
             var data = this;
             if ($element[0].tagName === "SELECT") {
                 var $parent = $element.parent();
-                var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));
+                var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));                
                 var input = $("<input type=\"text\" class=\"form-control\" data-toggle=\"dropdown\" />").attr("placeholder", options.placeholder);
                 var hidden = $("<input type=\"text\" style=\"display: none;\" />");
                 cover.append(input);
@@ -65,7 +65,7 @@
                         ul.css("width", input.width() + 25 + "px");
                     });
                 }
-                $parent.append(cover);
+                $parent.append(cover);                
                 if ($.uca.angular._isConnected()) {
                     if ($element.is("[uca-text-ng-model]")) {
                         input.attr("ng-model", $element.attr("uca-text-ng-model"));
