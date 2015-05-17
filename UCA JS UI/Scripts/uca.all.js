@@ -45,6 +45,20 @@
                 var $parent = $element.parent();
                 var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));                
                 var input = $("<input type=\"text\" class=\"form-control\" data-toggle=\"dropdown\" />").attr("placeholder", options.placeholder);
+                if ($element.attr("aria-autocomplete")) {
+                    input.bind("keyup", function () {
+                        var text = $(this).val();
+                        var items = $(this).parent().find("ul li");
+                        items.show();
+                        if (text !== '') {
+                            items.filter(function() {
+                                return $(this).text().indexOf(text) < 0;
+                            }).hide();
+                        }
+                    });
+                } else {
+                    input.attr("readonly", "readonly");
+                }
                 var hidden = $("<input type=\"text\" style=\"display: none;\" />");
                 cover.append(input);
                 cover.append(hidden);
