@@ -1,6 +1,8 @@
 ﻿(function ($) {
 
-    $.uca.control.subclass("uca.comboBox", {
+    $.uca.control.subclass("uca.datepiker", {});
+
+    $.uca.control.subclass("uca.combobox", {
 
         _bindUlClick: function(ul, input, hidden, data) {
             ul.on("click", "li a", function () {
@@ -112,31 +114,48 @@
     });
 
     $.uca.control.subclass("uca.accordion", {
-        _resize: function (element, correction) {
-            var corr = 50;
-            if (correction)
-                corr = correction;
+        _resize: function (element, widthCorrection, heightCorrection) {
+            var wCorr = 50;
+            var hCorr = 35;
+            if (widthCorrection)
+                wCorr = widthCorrection;
+            if (heightCorrection)
+                hCorr = heightCorrection;
             var $element = $(element);
             var panels = $element.children(".accordion-panel");
+            var headers = panels.children(".accordion-header");
+            var bodies = panels.children(".accordion-body");
             var data = $element.data("accordion");
 
             var maxHeight;
             if (data && data.options.height) {
-                maxHeight = data.options.height;
+                if (data.options.height === "fill_parent") {
+                    if ($element.hasClass("accordion-horizontal")) {
+                        maxHeight = $element.parent().height();
+                    } else {
+                        var headersHeight = headers.length * (headers.height() + hCorr);
+                        panels.hide();
+                        maxHeight = $element.parent().height() - headersHeight;
+                        panels.show();
+                    }
+                    bodies.css("overflow-y", "auto");
+                } else {
+                    maxHeight = data.options.height;
+                }
             } else {
                 maxHeight = 0;
             }
-            var bodies = panels.children(".accordion-body");
-            bodies.each(function () {
-                var $this = $(this);
-                if (maxHeight < $this.height()) {
-                    maxHeight = $this.height();
-                }
-            });
+            if (maxHeight === 0) {                
+                bodies.each(function() {
+                    var $this = $(this);
+                    if (maxHeight < $this.height()) {
+                        maxHeight = $this.height();
+                    }
+                });
+            }
 
             if ($element.hasClass("accordion-horizontal")) {
-                panels.not(0).css("margin-top", "-2px");
-                var headers = panels.children(".accordion-header");
+                panels.not(0).css("margin-top", "-2px");                
                 var div = $("<div style=\"overflow-x: auto;\"></div>");
                 var span = $("<span></span>");
                 div.append(span);
@@ -156,7 +175,7 @@
                 });
                 var maxWidth = 0;
                 if (data && data.options.width === "fill_parent") {
-                    var headersWidth = headers.length * (headers.width() + corr);
+                    var headersWidth = headers.length * (headers.width() + wCorr);
                     maxWidth = $element.parent().width() - headersWidth;
                 } else {
                     bodies.each(function () {
@@ -195,7 +214,7 @@
                 var body = panel.children(".accordion-body");
                 body.addClass("panel-body");
             });
-            self._resize(element, 65);
+            self._resize(element, $element.parent().hasScrollBar() ? 75 : 65);
         },
 
         _togglePanel: function (panel, style) {
@@ -280,7 +299,7 @@
         }
     });
 
-    $.plugin("comboBox", $.uca.comboBox);
+    $.plugin("combobox", $.uca.combobox);
     $.plugin("accordion", $.uca.accordion);
 
 }(jQuery));

@@ -21,7 +21,7 @@ namespace UCA_JS_UI
 
             bundles.Add(new ScriptBundle("~/bundle/bootstrap").Include("~/Scripts/bootstrap.js"));
 
-            bundles.Add(new ScriptBundle("~/bundle/uca").Include("~/Scripts/uca.core.js", "~/Scripts/uca.all.js"));
+            bundles.Add(new Bundle("~/bundle/uca").Include("~/Scripts/uca.core.js", "~/Scripts/uca.all.js"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include("~/Content/bootstrap.css", "~/Content/bootstrap-theme.css"));
 
