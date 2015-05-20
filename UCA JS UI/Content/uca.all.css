@@ -15,3 +15,12 @@
     -o-transform: rotate(-90deg) translateX(-700%);
     transform: rotate(-90deg) translateX(-700%);
 }
+
+.datepicker th,td {
+    text-align: center;
+    padding: 2px;
+}
+
+/*.datepicker td:hover {
+    
+}*/

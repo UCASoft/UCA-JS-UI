@@ -1,6 +1,69 @@
 ﻿(function ($) {
 
-    $.uca.control.subclass("uca.datepiker", {});
+    $.uca.control.subclass("uca.datepicker", {
+
+        _buildCalendar: function (element) {
+            var $element = $(element);
+            var currentDate = new Date(2015, 4);
+            var data = $element.data("datepicker");
+            var calendar = $("<table></table>");
+            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[currentDate.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
+            var weekRow = $("<tr></tr>");
+            for (var dn = 0; dn < 7; dn++) {
+                var number = dn + data.options.local.firstWeekDay;
+                if (number > 6) {
+                    number -= 7;
+                }
+                weekRow.append($("<th>" + data.options.local.weekDays[number] + "</th>"));
+            }
+            header.append(weekRow);
+            var body = $("<tbody></tbody>");
+            var d = 1;
+            for (var w = 0; w < 6; w++) {
+                var tr = $("<tr></tr>");
+                for (var n = 0; n < 7; n++) {
+                    var td = $("<td></td>");
+                    if (w === 0) {
+                        number = currentDate.firstDayOfMonth() - data.options.local.firstWeekDay;
+                        if (number < 0)
+                            number += 7;
+                        if (n >= number) {
+                            td.text(d++);
+                        }
+                    } else if (d <= currentDate.lastDateOfMonth()) {
+                        td.text(d++);
+                    }
+                    if (td.text()) {
+                        //td.addClass("btn-default");
+                    }
+                    tr.append(td);
+                }
+                body.append(tr);
+            }
+            calendar.append(header);
+            calendar.append(body);
+            $element.append(calendar);
+        },
+
+        _init: function (element, options) {
+            var $element = $(element);
+            var cover = $element;
+            cover.addClass("input-group");
+            var input = $("<input type=\"text\" class=\"form-control\" />").attr("placeholder", options.placeholder);
+            cover.append(input);
+            cover.append($("<span class=\"input-group-addon\" />").append("<span class=\"glyphicon glyphicon-calendar\" />"));
+            this._buildCalendar(element);
+        },
+
+        options: {
+            placeholder: "Select date",
+            local: {
+                firstWeekDay: 0,
+                months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+            }
+        }
+    });
 
     $.uca.control.subclass("uca.combobox", {
 
@@ -299,6 +362,7 @@
         }
     });
 
+    $.plugin("datepicker", $.uca.datepicker);
     $.plugin("combobox", $.uca.combobox);
     $.plugin("accordion", $.uca.accordion);
 

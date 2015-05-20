@@ -1,4 +1,25 @@
-﻿(function ($) {
+﻿if (!Date.prototype.weeksCount) {
+    (function () {
+        Date['prototype'].firstDayOfMonth = function () {
+            var year = this.getFullYear();
+            var monthNumber = this.getMonth();
+            return (new Date(year, monthNumber, 1)).getDay();
+        };
+
+        Date['prototype'].lastDateOfMonth = function () {
+            var year = this.getFullYear();
+            var monthNumber = this.getMonth();
+            return (new Date(year, monthNumber + 1, 0)).getDate();
+        }
+
+        Date['prototype'].weeksCount = function () {
+            var used = this.firstDayOfMonth() + this.lastDateOfMonth();
+            return Math.ceil(used / 7);
+        };
+    }());
+}
+
+(function ($) {
     $.fn.hasScrollBar = function () {
         return this.get(0).scrollHeight > this.height();
     }
