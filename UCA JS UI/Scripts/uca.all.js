@@ -4,6 +4,7 @@
 
         _buildCalendar: function (element, selectedMonth) {
             var $element = $(element);
+            $element.addClass("datepicker");
             var currentDate = new Date();
             var self = $element.data("datepicker");
             var data = self;
@@ -11,9 +12,20 @@
             if (calendar.length === 1) {
                 calendar.empty();
             } else {
-                calendar = $("<table></table>");
+                calendar = $("<table style=\"position: absolute;\"></table>");
             }
-            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[selectedMonth.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
+            var monthWidth = 0;
+            var span = $("<span></span>");
+            $element.append(span);
+            for (var i = 0; i < data.options.local.months.length; i++) {
+                span.text(data.options.local.months[i]);
+                if (monthWidth < span.width()) {
+                    monthWidth = span.width();
+                }
+            }
+            monthWidth += 20;
+            span.remove();
+            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\"><table style=\"width: 100%;\"><tbody><tr><td style=\"width: " + monthWidth + "px; text-align:center;\">" + data.options.local.months[selectedMonth.getMonth()] + "</td><td style=\"text-align: center;\">" + selectedMonth.getFullYear() + "</td></tr></tbody></table></th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
             header.find("th.glyphicon").bind("click", function () {
                 var $this = $(this);
                 var newMonth = selectedMonth.getMonth();
@@ -34,9 +46,10 @@
                 }
                 self._buildCalendar(element, new Date(newYear, newMonth));
             });
+            var number;
             var weekRow = $("<tr></tr>");
             for (var dn = 0; dn < 7; dn++) {
-                var number = dn + data.options.local.firstWeekDay;
+                number = dn + data.options.local.firstWeekDay;
                 if (number > 6) {
                     number -= 7;
                 }
@@ -61,16 +74,24 @@
                     }
                     if (td.text()) {                        
                         td.addClass("dates");
-                        if (selectedMonth.getMonth() == currentDate.getMonth() && currentDate.getDate() == td.text()) {
+                        if (selectedMonth.getFullYear() === currentDate.getFullYear() && selectedMonth.getMonth() === currentDate.getMonth() && currentDate.getDate() == td.text()) {
                             td.addClass("current-date");
                         }
                     }
                     tr.append(td);
                 }
+                if (tr.text() === "") {
+                    tr.height(27);
+                }
                 body.append(tr);
             }
+            var footer = $("<tfoot><tr><td colspan=\"7\">" + data.options.local.today + "</td></tr></tfoot>");
+            footer.find("td").bind("click", function () {
+                self._buildCalendar(element, new Date());
+            });
             calendar.append(header);
             calendar.append(body);
+            calendar.append(footer);
             $element.append(calendar);
         },
 
@@ -80,8 +101,21 @@
             cover.addClass("input-group");
             var input = $("<input type=\"text\" class=\"form-control\" />").attr("placeholder", options.placeholder);
             cover.append(input);
-            cover.append($("<span class=\"input-group-addon\" />").append("<span class=\"glyphicon glyphicon-calendar\" />"));
+            var button = $("<span class=\"input-group-addon\" />").append("<span class=\"glyphicon glyphicon-calendar\" />");
+            cover.append(button);
             this._buildCalendar(element, new Date());
+            var calendar = $(element).children("table");
+            button.click(function() {
+                calendar.toggle("fast", "linear");
+            });
+            var resize = function() {                
+                calendar.offset({
+                    left: button.position().left + button.width()
+                });
+            };
+            $(window).resize(resize);
+            resize();
+            calendar.css("display", "none");
         },
 
         options: {
@@ -89,7 +123,8 @@
             local: {
                 firstWeekDay: 0,
                 months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-                weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+                weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+                today: "Today"
             }
         }
     });

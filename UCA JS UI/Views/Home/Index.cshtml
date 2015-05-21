@@ -301,7 +301,14 @@ function enablePanel(button) {
         $(window).resize(function () {
             $("#main-panel").height($(window).height() - 115);
         });
-        $(".datepicker").datepicker();
+        $(".datepicker").datepicker({
+            local: {
+                firstWeekDay: 1,
+                months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                weekDays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                today: "Сегодня"
+            }
+        });
         $(".accordion:first").accordion({ height: "fill_parent" });
         $(".accordion:first > .accordion-panel:last > .accordion-body").show();
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });
