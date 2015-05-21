@@ -9,18 +9,25 @@
 
 .accordion-horizontal .panel-title {
 
-    -webkit-transform: rotate(-90deg) translateX(-700%);
-    -moz-transform: rotate(-90deg) translateX(-700%);
-    -ms-transform: rotate(-90deg) translateX(-700%);
-    -o-transform: rotate(-90deg) translateX(-700%);
-    transform: rotate(-90deg) translateX(-700%);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
 
 .datepicker th,td {
     text-align: center;
     padding: 2px;
+    cursor: default;
 }
 
-/*.datepicker td:hover {
-    
-}*/
+.datepicker .dates:hover {
+    background-color: rgb(238, 238, 238);
+}
+
+.datepicker .current-date {
+    border: 1px solid rgb(48, 115, 171);
+    -ms-border-radius: 45%;
+    border-radius: 45%;
+}

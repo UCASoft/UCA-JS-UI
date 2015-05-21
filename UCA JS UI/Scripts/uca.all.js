@@ -2,12 +2,39 @@
 
     $.uca.control.subclass("uca.datepicker", {
 
-        _buildCalendar: function (element) {
+        _buildCalendar: function (element, selectedMonth) {
             var $element = $(element);
-            var currentDate = new Date(2015, 4);
-            var data = $element.data("datepicker");
-            var calendar = $("<table></table>");
-            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[currentDate.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
+            var currentMonth = selectedMonth;
+            var currentDate = new Date();
+            var self = $element.data("datepicker");
+            var data = self;
+            var calendar = $element.children("table");
+            if (calendar.length === 1) {
+                calendar.empty();
+            } else {
+                calendar = $("<table></table>");
+            }
+            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[currentMonth.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
+            header.find("th.glyphicon").bind("click", function () {
+                var $this = $(this);
+                var newMonth = currentMonth.getMonth();
+                var newYear = currentMonth.getYear();
+                if ($this.hasClass("glyphicon-chevron-left")) {
+                    newMonth -= 1;
+                    if (newMonth < 0) {
+                        newMonth = 11;
+                        newYear -= 1;
+                    }
+                    
+                } else {
+                    newMonth += 1;
+                    if (newMonth > 11) {
+                        newMonth = 0;
+                        newYear += 1;
+                    }
+                }
+                self._buildCalendar(element, new Date(newYear, newMonth));
+            });
             var weekRow = $("<tr></tr>");
             for (var dn = 0; dn < 7; dn++) {
                 var number = dn + data.options.local.firstWeekDay;
@@ -24,17 +51,20 @@
                 for (var n = 0; n < 7; n++) {
                     var td = $("<td></td>");
                     if (w === 0) {
-                        number = currentDate.firstDayOfMonth() - data.options.local.firstWeekDay;
+                        number = currentMonth.firstDayOfMonth() - data.options.local.firstWeekDay;
                         if (number < 0)
                             number += 7;
                         if (n >= number) {
                             td.text(d++);
                         }
-                    } else if (d <= currentDate.lastDateOfMonth()) {
+                    } else if (d <= currentMonth.lastDateOfMonth()) {
                         td.text(d++);
                     }
-                    if (td.text()) {
-                        //td.addClass("btn-default");
+                    if (td.text()) {                        
+                        td.addClass("dates");
+                        if (currentMonth.getMonth() == currentDate.getMonth() && currentDate.getDate() == td.text()) {
+                            td.addClass("current-date");
+                        }
                     }
                     tr.append(td);
                 }
@@ -52,7 +82,7 @@
             var input = $("<input type=\"text\" class=\"form-control\" />").attr("placeholder", options.placeholder);
             cover.append(input);
             cover.append($("<span class=\"input-group-addon\" />").append("<span class=\"glyphicon glyphicon-calendar\" />"));
-            this._buildCalendar(element);
+            this._buildCalendar(element, new Date());
         },
 
         options: {
@@ -177,18 +207,21 @@
     });
 
     $.uca.control.subclass("uca.accordion", {
+        _widthCorrection: [{ first: 112, next: 63 }, { first: 145, next: 96 }, { first: 180, next: 130 }, { first: 210, next: 160 }, { first: 245, next: 195 }, { first: 280, next: 225 }], //TODO Need to find some function!!!
+
         _resize: function (element, widthCorrection, heightCorrection) {
-            var wCorr = 50;
-            var hCorr = 35;
-            if (widthCorrection)
-                wCorr = widthCorrection;
-            if (heightCorrection)
-                hCorr = heightCorrection;
             var $element = $(element);
             var panels = $element.children(".accordion-panel");
             var headers = panels.children(".accordion-header");
             var bodies = panels.children(".accordion-body");
             var data = $element.data("accordion");
+
+            var wCorr = this._widthCorrection[panels.length - 1].next;
+            var hCorr = 35;
+            if (widthCorrection)
+                wCorr = widthCorrection;
+            if (heightCorrection)
+                hCorr = heightCorrection;
 
             var maxHeight;
             if (data && data.options.height) {
@@ -226,19 +259,22 @@
                 headers.children().each(function () {
                     var $this = $(this);
                     span.text($this.text());
-                    if (maxHeight < span.width() + 10) {
-                        maxHeight = span.width() + 10;
+                    if (maxHeight < span.width()) {
+                        maxHeight = span.width();
                     }
                 });
                 div.remove();
-                headers.height(maxHeight + 10);
+                var coeff = Math.floor(maxHeight / 100);
+                var headerHeightCorrection = (coeff + 1) * 10;
+                var headerMarginCorrection = 5 + 20 * ((coeff - 1) / 2);
+                headers.height(maxHeight + headerHeightCorrection).children().css("margin-top", maxHeight + headerMarginCorrection + "px");
                 headers.children(".panel-title").each(function () {
                     var $this = $(this);
                     $this.html($.trim($this.text()).replace(/\s/g, "&nbsp;"));
                 });
                 var maxWidth = 0;
                 if (data && data.options.width === "fill_parent") {
-                    var headersWidth = headers.length * (headers.width() + wCorr);
+                    var headersWidth = headers.length * headers.width() + wCorr;
                     maxWidth = $element.parent().width() - headersWidth;
                 } else {
                     bodies.each(function () {
@@ -277,7 +313,7 @@
                 var body = panel.children(".accordion-body");
                 body.addClass("panel-body");
             });
-            self._resize(element, $element.parent().hasScrollBar() ? 75 : 65);
+            self._resize(element, $element.parent().hasScrollBar() ? this._widthCorrection[$element.children(".accordion-panel").length - 1].first : 65);
         },
 
         _togglePanel: function (panel, style) {
