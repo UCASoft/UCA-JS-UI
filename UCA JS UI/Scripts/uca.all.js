@@ -4,7 +4,6 @@
 
         _buildCalendar: function (element, selectedMonth) {
             var $element = $(element);
-            var currentMonth = selectedMonth;
             var currentDate = new Date();
             var self = $element.data("datepicker");
             var data = self;
@@ -14,11 +13,11 @@
             } else {
                 calendar = $("<table></table>");
             }
-            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[currentMonth.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
+            var header = $("<thead></thead>").append("<tr><th class=\"glyphicon glyphicon-chevron-left\"></th><th colspan=\"5\">" + data.options.local.months[selectedMonth.getMonth()] + "</th><th class=\"glyphicon glyphicon-chevron-right\"></th></tr>");
             header.find("th.glyphicon").bind("click", function () {
                 var $this = $(this);
-                var newMonth = currentMonth.getMonth();
-                var newYear = currentMonth.getYear();
+                var newMonth = selectedMonth.getMonth();
+                var newYear = selectedMonth.getFullYear();
                 if ($this.hasClass("glyphicon-chevron-left")) {
                     newMonth -= 1;
                     if (newMonth < 0) {
@@ -51,18 +50,18 @@
                 for (var n = 0; n < 7; n++) {
                     var td = $("<td></td>");
                     if (w === 0) {
-                        number = currentMonth.firstDayOfMonth() - data.options.local.firstWeekDay;
+                        number = selectedMonth.firstDayOfMonth() - data.options.local.firstWeekDay;
                         if (number < 0)
                             number += 7;
                         if (n >= number) {
                             td.text(d++);
                         }
-                    } else if (d <= currentMonth.lastDateOfMonth()) {
+                    } else if (d <= selectedMonth.lastDateOfMonth()) {
                         td.text(d++);
                     }
                     if (td.text()) {                        
                         td.addClass("dates");
-                        if (currentMonth.getMonth() == currentDate.getMonth() && currentDate.getDate() == td.text()) {
+                        if (selectedMonth.getMonth() == currentDate.getMonth() && currentDate.getDate() == td.text()) {
                             td.addClass("current-date");
                         }
                     }
@@ -206,22 +205,18 @@
 
     });
 
-    $.uca.control.subclass("uca.accordion", {
-        _widthCorrection: [{ first: 112, next: 63 }, { first: 145, next: 96 }, { first: 180, next: 130 }, { first: 210, next: 160 }, { first: 245, next: 195 }, { first: 280, next: 225 }], //TODO Need to find some function!!!
+    $.uca.control.subclass("uca.accordion", {        
+        _widthCorrection: [63, 96, 130, 160, 195, 225], //TODO Need to find some function!!!
 
-        _resize: function (element, widthCorrection, heightCorrection) {
+        _resize: function (element) {
             var $element = $(element);
             var panels = $element.children(".accordion-panel");
             var headers = panels.children(".accordion-header");
             var bodies = panels.children(".accordion-body");
             var data = $element.data("accordion");
 
-            var wCorr = this._widthCorrection[panels.length - 1].next;
+            var wCorr = this._widthCorrection[panels.length - 1];
             var hCorr = 35;
-            if (widthCorrection)
-                wCorr = widthCorrection;
-            if (heightCorrection)
-                hCorr = heightCorrection;
 
             var maxHeight;
             if (data && data.options.height) {
@@ -313,7 +308,7 @@
                 var body = panel.children(".accordion-body");
                 body.addClass("panel-body");
             });
-            self._resize(element, $element.parent().hasScrollBar() ? this._widthCorrection[$element.children(".accordion-panel").length - 1].first : 65);
+            self._resize(element);
         },
 
         _togglePanel: function (panel, style) {

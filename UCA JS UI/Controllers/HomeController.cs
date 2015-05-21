@@ -17,5 +17,16 @@ namespace UCA_JS_UI.Controllers
         {
             return View();
         }
+
+        /// <summary>
+        /// The alex.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Alex()
+        {
+            return View();
+        }
     }
 }

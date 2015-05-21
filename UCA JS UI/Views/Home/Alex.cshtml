@@ -1,0 +1,103 @@
+﻿<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <title>UCA JS UI Example</title>
+    <!-- START connection CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" /><!-- 1st BOOTSTRAP -->
+    <link href="~/Content/uca.all.css" rel="stylesheet" /> <!-- 2nd UCA Accordion -->
+    <!--[if lt IE 9]>
+        <link href="~/Content/uca.all.old.css" rel="stylesheet"/> <!-- 3rd UCA Accordion for old IE -->
+    <![endif]-->
+    <!-- START connection JS -->
+</head>
+
+<body style="overflow: auto;">
+
+    <!-- START Vertical accordion -->
+    <div class="accordion">
+        <!-- START 1st pannel -->
+        <div class="accordion-panel">
+            <div class="accordion-header">
+                <h4>1st Vertical header from html</h4>
+            </div>
+            <div class="accordion-body">
+                <div style="width: 100px; height: 100px; background-color: blue;"></div>
+                <p>By default, the active 1st tab</p>
+                <p>По умолчанию активна 1-я вкладка</p>
+            </div>
+        </div>
+        <!-- END 1st pannel -->
+        <!-- START 2nd pannel -->
+        <div class="accordion-panel">
+            <div class="accordion-header">
+                <h4>2nd Vertical header from html</h4>
+            </div>
+            <div class="accordion-body">
+                <div style="width: 100px; height: 100px; background-color: red;"></div>
+            </div>
+        </div>
+        <!-- END 2nd pannel -->
+    </div>
+    <!-- END Vertical accordion -->
+    <!-- START Horizontal accordion -->
+    <div class="accordion accordion-horizontal">
+        <!-- START 1st pannel -->
+        <div class="accordion-panel">
+            <div class="accordion-header">
+                <h4>1st Horizontal header from html</h4>
+            </div>
+            <div class="accordion-body">
+                <div style="width: 100px; height: 100px; background-color: blue;"></div>
+            </div>
+        </div>
+        <!-- END 1st pannel -->
+        <!-- START 2nd pannel -->
+        <div aria-expanded="true" class="accordion-panel">
+            <div class="accordion-header">
+                <h4>2nd Horizontal header from html (DEFAULT ACTIVE)</h4>
+            </div>
+            <div class="accordion-body">
+                <div style="width: 100px; height: 100px; background-color: red;"></div>
+                <p>To select <b>the default open</b> any tab, use the attribute <i>aria-expanded = "true"</i></p>
+                <p>Example:</p>
+                <p><code>&lt;div aria-expanded=&quot;true&quot; class=&quot;accordion-panel&quot;&gt;</code></p>
+                <p>Для выбора <b>открытой по умолчанию</b> произвольной вкладки, используем атрибут <i>aria-expanded = "true"</i></p>
+                <p>Например:</p>
+                <p><code>&lt;div aria-expanded=&quot;true&quot; class=&quot;accordion-panel&quot;&gt;</code></p>
+
+                <br><br><br><br>
+
+                <p>To <b>disable a tab</b>, you must add to her class <i>disabled</i>.</p>
+                <p>Example:</p>
+                <p><code>&lt;div class=&quot;accordion-panel disabled&quot;&gt;</code></p>
+                <p>Для <b>деактивации вкладки</b> необходимо добавить ей класс <i>disabled</i>.</p>
+                <p>Например:</p>
+                <p><code>&lt;div class=&quot;accordion-panel disabled&quot;&gt;</code></p>
+            </div>
+        </div>
+        <!-- END 2nd pannel -->
+        <!-- START 3rd pannel -->
+        <!--<div class="accordion-panel disabled">
+            <div class="accordion-header">
+                <h4>3rd Horizontal header from html (DISABLED)</h4>
+            </div>
+            <div class="accordion-body">
+                <div style="width: 100px; height: 100px; background-color: red;"></div>
+            </div>
+        </div>-->
+        <!-- END 3rd pannel -->
+    </div>
+    <!-- END Horizontal accordion -->
+    <!-- START connection JS -->
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script> <!-- 1st JQUERY -->
+    <!--[if lt IE 9]><script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script><![endif]--> <!-- 2nd JQUERY for old IE -->
+    <script src="~/Scripts/bootstrap.min.js"></script> <!-- 3rd BOOTSTRAP -->
+    <script src="~/Scripts/uca.core.js"></script> <!-- 4th UCA Accordion CORE -->
+    <script src="~/Scripts/uca.all.js"></script> <!-- 5th UCA Accordion -->
+    <!-- START 6th UCA Accordion INITIALISING -->
+    <script>
+$(".accordion").accordion();
+    </script>
+    <!-- END 6th UCA Accordion INITIALISING -->
+    <!-- END connection JS -->
+</body>

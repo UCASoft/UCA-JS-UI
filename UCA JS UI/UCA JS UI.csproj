@@ -151,6 +151,7 @@
     <Content Include="Scripts\uca.comboBox.js" />
     <Content Include="Scripts\uca.accordion.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
+    <Content Include="Views\Home\Alex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
