@@ -35,7 +35,15 @@
                             Result
                         </div>
                         <div class="panel-body">
-                            <div class="datepicker"></div>
+                            <div class="row">
+                                <div class="col-lg-4 col-lg-push-4">
+                                    <p>
+                                        Model date: {{main.datepicker}}
+                                    </p>
+                                    <div class="datepicker" uca-ng-model="main.datepicker"></div>
+                                    <div class="datepicker" style="margin-top: 15px;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default">
@@ -48,7 +56,19 @@
                                     html
                                 </div>
                                 <div class="panel-body">
-
+                                    <pre>
+                                        <code class="html">
+&lt;body ng-app="ucajs"&gt;
+    &lt;div ng-controller="MainController as main"&gt;
+        ... &lt;!--AngularJs is only needed to model binding! You can use DatePicker without it!
+            At the moment DatePicker model binding works only in one way (you can change text in input from model but that won't change js data object)!--&gt;
+        &lt;p&gt;
+	        Model date: &lang;&lang;main.datepicker&rang;&rang;
+        &lt;/p&gt;
+        &lt;div class="datepicker" uca-ng-model="main.datepicker"&gt;&lt;/div&gt;
+        &lt;div class="datepicker" style="margin-top: 15px;"&gt;&lt;/div&gt;
+                                        </code>
+                                    </pre>
                                 </div>
                             </div>
                             <div class="panel panel-default">
@@ -56,7 +76,16 @@
                                     javascript
                                 </div>
                                 <div class="panel-body">
-
+                                    <pre>
+                                        <code>
+angular.module("ucajs", []).controller("MainController", function () {
+}); //&lt;-- AngularJs is only needed to model binding! You can use DatePicker without it!
+...
+$(".datepicker").datepicker().eq(1).datepicker({"onSelectDateChanged": function (date) {
+    alert(date);
+}});
+                                        </code>
+                                    </pre>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +148,8 @@
                                             <code class="html">
 &lt;body ng-app="ucajs"&gt;
     &lt;div ng-controller="MainController as main"&gt;
-        ... &lt;!--AngularJs is only needed to model binding! You can use ComboBox without it!--&gt;
+        ... &lt;!--AngularJs is only needed to model binding! You can use ComboBox without it!
+            At the moment ComboBox model binding works only in one way (you can change text in input from model but that won't change js data object)!--&gt;
         &lt;p&gt;Model text: &lang;&lang;main.comboText&rang;&rang;&lt;/p&gt;
         &lt;p&gt;Model value: &lang;&lang;main.comboValue&rang;&rang;&lt;/p&gt;
         &lt;select uca-text-ng-model="main.comboText" uca-value-ng-model="main.comboValue"&gt;
@@ -301,14 +331,17 @@ function enablePanel(button) {
         $(window).resize(function () {
             $("#main-panel").height($(window).height() - 115);
         });
-        $(".datepicker").datepicker({
+        $(".datepicker").datepicker(/*{
             local: {
+                name: "ru",
                 firstWeekDay: 1,
                 months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
                 weekDays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
                 today: "Сегодня"
             }
-        });
+        }*/).eq(1).datepicker({"onSelectDateChanged": function (date) {
+            alert(date);
+        }});
         $(".accordion:first").accordion({ height: "fill_parent" });
         $(".accordion:first > .accordion-panel:last > .accordion-body").show();
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });

@@ -16,11 +16,16 @@
     transform: rotate(-90deg);
 }
 
+.datepicker .input-group-addon .glyphicon {
+    cursor: default;
+}
+
 .datepicker > table {
     background-color: white;
     border: 2px solid rgb(221, 221, 221);
     margin-top: 5px;
     font-size: 16px;
+    z-index: 1000;
 }
 
 .datepicker th,td {
@@ -35,6 +40,12 @@
 
 .datepicker .current-date {
     border: 1px solid rgb(48, 115, 171);
+    -ms-border-radius: 45%;
+    border-radius: 45%;
+}
+
+.datepicker .selected {
+    background-color: rgb(92, 184, 92);
     -ms-border-radius: 45%;
     border-radius: 45%;
 }

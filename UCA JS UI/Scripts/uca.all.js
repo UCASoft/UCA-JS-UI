@@ -74,8 +74,11 @@
                     }
                     if (td.text()) {                        
                         td.addClass("dates");
-                        if (selectedMonth.getFullYear() === currentDate.getFullYear() && selectedMonth.getMonth() === currentDate.getMonth() && currentDate.getDate() == td.text()) {
+                        if (selectedMonth.getFullYear() === currentDate.getFullYear() && selectedMonth.getMonth() === currentDate.getMonth() && td.text() == currentDate.getDate()) {
                             td.addClass("current-date");
+                        }
+                        if (data.selectedDate && selectedMonth.getFullYear() === data.selectedDate.getFullYear() && selectedMonth.getMonth() === data.selectedDate.getMonth() && td.text() == data.selectedDate.getDate()) {
+                            td.addClass("selected");
                         }
                     }
                     tr.append(td);
@@ -85,6 +88,22 @@
                 }
                 body.append(tr);
             }
+            body.find(".dates").bind("click", function () {
+                var $this = $(this);
+                var input = $this.closest(".input-group").children("input");
+                var date = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), $this.text());
+                if (!data.selectedDate || data.selectedDate.getTime() !== date.getTime()) {
+                    data.selectedDate = date;
+                    input.val(date.toLocaleDateString(data.options.local.name));
+                    if ($.uca.angular._isConnected()) {
+                        input.change();
+                    }
+                    if (data.options.onSelectDateChanged) {
+                        data.options.onSelectDateChanged(date);
+                    }
+                }
+                calendar.toggle("fast", "linear");
+            });
             var footer = $("<tfoot><tr><td colspan=\"7\">" + data.options.local.today + "</td></tr></tfoot>");
             footer.find("td").bind("click", function () {
                 self._buildCalendar(element, new Date());
@@ -97,20 +116,28 @@
 
         _init: function (element, options) {
             var $element = $(element);
+            var self = this;
+            var data = $element.data("datepicker");
             var cover = $element;
             cover.addClass("input-group");
-            var input = $("<input type=\"text\" class=\"form-control\" />").attr("placeholder", options.placeholder);
+            var input = $("<input type=\"text\" readonly=\"readonly\" class=\"form-control\" />").attr("placeholder", options.placeholder);
             cover.append(input);
+            if ($.uca.angular._isConnected() && $element.is("[uca-ng-model]")) {
+                input.attr("ng-model", $element.attr("uca-ng-model"));
+                $.uca.angular._compile(input);
+            }
             var button = $("<span class=\"input-group-addon\" />").append("<span class=\"glyphicon glyphicon-calendar\" />");
             cover.append(button);
-            this._buildCalendar(element, new Date());
+            self._buildCalendar(element, new Date());
             var calendar = $(element).children("table");
-            button.click(function() {
+            button.click(function () {
+                if (data.selectedDate)
+                    self._buildCalendar(element, data.selectedDate);
                 calendar.toggle("fast", "linear");
             });
-            var resize = function() {                
+            var resize = function() {
                 calendar.offset({
-                    left: button.position().left + button.width()
+                    left: button.offset().left - calendar.width()
                 });
             };
             $(window).resize(resize);
@@ -121,6 +148,7 @@
         options: {
             placeholder: "Select date",
             local: {
+                name: "en-US",
                 firstWeekDay: 0,
                 months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
