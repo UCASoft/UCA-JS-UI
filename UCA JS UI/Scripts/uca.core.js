@@ -32,7 +32,7 @@
     $.uca.angular = {
 
         _isConnected: function () {
-            return angular && true;
+            return window.angular && true;
         },
 
         _compile: function (element) {
