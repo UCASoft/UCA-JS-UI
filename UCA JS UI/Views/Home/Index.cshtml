@@ -67,6 +67,9 @@
         &lt;/p&gt;
         &lt;div class="datepicker" uca-ng-model="main.datepicker"&gt;&lt;/div&gt;
         &lt;div class="datepicker" style="margin-top: 15px;"&gt;&lt;/div&gt;
+        ...
+    &lt;/div&gt;
+&lt;/body&gt;
                                         </code>
                                     </pre>
                                 </div>
@@ -130,6 +133,17 @@ $(".datepicker").datepicker().eq(1).datepicker({"onSelectDateChanged": function 
                                     </select>
                                 </div>
                             </div>
+                            <div class="row" style="padding-top: 15px;">
+                                <div class="col-lg-10 col-lg-push-1 col-xs-10 col-xs-push-1">
+                                    <select>
+                                        <option value="0">Zero</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                        <option value="4">Four</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default">
@@ -159,7 +173,6 @@ $(".datepicker").datepicker().eq(1).datepicker({"onSelectDateChanged": function 
             &lt;option value="3"&gt;Three&lt;/option&gt;
             &lt;option value="4"&gt;Four&lt;/option&gt;
         &lt;/select&gt;
-        ...
         &lt;select aria-autocomplete="list"&gt;
             &lt;option value="0"&gt;Zero&lt;/option&gt;
             &lt;option value="1"&gt;One&lt;/option&gt;
@@ -167,6 +180,9 @@ $(".datepicker").datepicker().eq(1).datepicker({"onSelectDateChanged": function 
             &lt;option value="3"&gt;Three&lt;/option&gt;
             &lt;option value="4"&gt;Four&lt;/option&gt;
         &lt;/select&gt;
+        ...
+    &lt;/div&gt;
+&lt;/body&gt;
                                                 </code>
                                             </pre>
                                 </div>
@@ -346,9 +362,11 @@ function enablePanel(button) {
         $(".accordion:first > .accordion-panel:last > .accordion-body").show();
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });
         $(".accordion:first > .accordion-panel:last > .accordion-body").hide();
-        $("select").combobox().eq(1).combobox({"onSelectIndexChanged": function (item) {
+        $("select:lt(2)").combobox().eq(1).combobox({"onSelectIndexChanged": function (item) {
             alert(JSON.stringify(item));
-        }});
+        }
+        });
+        $("select:eq(2)").combobox({ multiSelect: true });
     });
     function enablePanel(button) {
         var $button = $(button);
