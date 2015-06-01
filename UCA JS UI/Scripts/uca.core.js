@@ -1,4 +1,4 @@
-﻿if (!Date.prototype.weeksCount) {
+﻿if (!Date.prototype.firstDayOfMonth) {
     (function () {
         Date['prototype'].firstDayOfMonth = function () {
             var year = this.getFullYear();
@@ -11,11 +11,6 @@
             var monthNumber = this.getMonth();
             return (new Date(year, monthNumber + 1, 0)).getDate();
         }
-
-        Date['prototype'].weeksCount = function () {
-            var used = this.firstDayOfMonth() + this.lastDateOfMonth();
-            return Math.ceil(used / 7);
-        };
     }());
 }
 
@@ -61,7 +56,7 @@
         $[name[0]][name[1]] = childclass;
     };
 
-    $.plugin = function (name, object) {
+    $.uca.plugin = function (name, object) {
         $.fn[name] = function (options, args) {
             return this.each(function () {
                 var $this = $(this);
@@ -82,6 +77,12 @@
 
             });
         }
+    }
+
+    $("body").append("<div style=\"position: absolute; top: 0; right: 0;\" id=\"uca-log\"></div>");
+
+    $.uca.log = function (message) {
+        $("#uca-log").append("<p>" + message + "</p>");
     }
 
 }(jQuery));

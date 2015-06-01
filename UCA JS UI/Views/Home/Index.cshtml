@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using UCA_JS_UI.Models
 <!DOCTYPE html>
 
 <html>
@@ -24,302 +25,148 @@
                 <h4>Welcome to UCA JS UI example site</h4>
             </div>
             <div class="panel-body" id="main-panel">
-            <div class="accordion">
-            <div class="accordion-panel">
-                <div class="accordion-header">
-                    <h4>DatePiker</h4>
-                </div>
-                <div class="accordion-body">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Result
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-4 col-lg-push-4">
-                                    <p>
-                                        Model date: {{main.datepicker}}
-                                    </p>
-                                    <div class="datepicker" uca-ng-model="main.datepicker"></div>
-                                    <div class="datepicker" style="margin-top: 15px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Code
-                        </div>
-                        <div class="panel-body">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    html
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                        <code class="html">
-&lt;body ng-app="ucajs"&gt;
-    &lt;div ng-controller="MainController as main"&gt;
-        ... &lt;!--AngularJs is only needed to model binding! You can use DatePicker without it!
-            At the moment DatePicker model binding works only in one way (you can change text in input from model but that won't change js data object)!--&gt;
-        &lt;p&gt;
-	        Model date: &lang;&lang;main.datepicker&rang;&rang;
-        &lt;/p&gt;
-        &lt;div class="datepicker" uca-ng-model="main.datepicker"&gt;&lt;/div&gt;
-        &lt;div class="datepicker" style="margin-top: 15px;"&gt;&lt;/div&gt;
+                <div class="accordion">
+                    <div class="accordion-panel">
+                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel { Caption = "DatePicker", ContentPath = "~/Views/Partials/_DatePicker.cshtml", HtmlExample = @"
+<body ng-app=""ucajs"">
+    <div ng-controller=""MainController as main"">
+        ...<!--AngularJs is only needed to model binding!You can use DatePicker without it!
+            At the moment DatePicker model binding works only in one way (you can change text in input from model but that won't change js data object)!-->
+            <p>
+                Model date:{{main.datepicker}}
+            </p>
+        <div class=""datepicker"" uca-ng-model=""main.datepicker""></div>
+        <div class=""datepicker"" style=""margin-top: 15px;""></div>
         ...
-    &lt;/div&gt;
-&lt;/body&gt;
-                                        </code>
-                                    </pre>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    javascript
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                        <code>
-angular.module("ucajs", []).controller("MainController", function () {
-}); //&lt;-- AngularJs is only needed to model binding! You can use DatePicker without it!
+    </div>
+</body>", JsExample = @"
+angular.module(""ucajs"", []).controller(""MainController"", function () {
+}); //<-- AngularJs is only needed to model binding! You can use DatePicker without it!
 ...
-$(".datepicker").datepicker().eq(1).datepicker({"onSelectDateChanged": function (date) {
+$("".datepicker"").datepicker().eq(1).datepicker({""onSelectDateChanged"": function (date) {
     alert(date);
 }});
-                                        </code>
-                                    </pre>
-                                </div>
-                            </div>
-                        </div>
+" })
                     </div>
-                </div>
-            </div>
-            <div class="accordion-panel">
-                <div class="accordion-header">
-                    <h4>ComboBox</h4>
-                </div>
-                <div class="accordion-body">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Result
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-10 col-lg-push-1 col-xs-10 col-xs-push-1">
-                                    <p>
-                                        Model text: {{main.comboText}}
-                                    </p>
-                                    <p>
-                                        Model value: {{main.comboValue}}
-                                    </p>
-                                    <select uca-text-ng-model="main.comboText" uca-value-ng-model="main.comboValue">
-                                        <option value="0">Zero</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                        <option value="4">Four</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-top: 15px;">
-                                <div class="col-lg-10 col-lg-push-1 col-xs-10 col-xs-push-1">
-                                    <select aria-autocomplete="list">
-                                        <option value="0">Zero</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                        <option value="4">Four</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-top: 15px;">
-                                <div class="col-lg-10 col-lg-push-1 col-xs-10 col-xs-push-1">
-                                    <select>
-                                        <option value="0">Zero</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                        <option value="4">Four</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Code
-                        </div>
-                        <div class="panel-body">
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        html
-                                    </h4>
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                            <code class="html">
-&lt;body ng-app="ucajs"&gt;
-    &lt;div ng-controller="MainController as main"&gt;
-        ... &lt;!--AngularJs is only needed to model binding! You can use ComboBox without it!
-            At the moment ComboBox model binding works only in one way (you can change text in input from model but that won't change js data object)!--&gt;
-        &lt;p&gt;Model text: &lang;&lang;main.comboText&rang;&rang;&lt;/p&gt;
-        &lt;p&gt;Model value: &lang;&lang;main.comboValue&rang;&rang;&lt;/p&gt;
-        &lt;select uca-text-ng-model="main.comboText" uca-value-ng-model="main.comboValue"&gt;
-            &lt;option value="0"&gt;Zero&lt;/option&gt;
-            &lt;option value="1"&gt;One&lt;/option&gt;
-            &lt;option value="2"&gt;Two&lt;/option&gt;
-            &lt;option value="3"&gt;Three&lt;/option&gt;
-            &lt;option value="4"&gt;Four&lt;/option&gt;
-        &lt;/select&gt;
-        &lt;select aria-autocomplete="list"&gt;
-            &lt;option value="0"&gt;Zero&lt;/option&gt;
-            &lt;option value="1"&gt;One&lt;/option&gt;
-            &lt;option value="2"&gt;Two&lt;/option&gt;
-            &lt;option value="3"&gt;Three&lt;/option&gt;
-            &lt;option value="4"&gt;Four&lt;/option&gt;
-        &lt;/select&gt;
+                    <div class="accordion-panel">
+                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
+           {
+               Caption = "ComboBox",
+               ContentPath = "~/Views/Partials/_ComboBox.cshtml",
+               HtmlExample = @"
+<body ng-app=""ucajs"">
+    <div ng-controller=""MainController as main"">
+        ... <!--AngularJs is only needed to model binding! You can use ComboBox without it!
+            At the moment ComboBox model binding works only in one way (you can change text in input from model but that won't change js data object)!-->
+        <p>Model text: {{main.comboText}}</p>
+        <p>Model value: {{main.comboValue}}</p>
+        <select uca-text-ng-model=""main.comboText"" uca-value-ng-model=""main.comboValue"">
+            <option value=""0"">Zero</option>
+            <option value=""1"">One</option>
+            <option value=""2"">Two</option>
+            <option value=""3"">Three</option>
+            <option value=""4"">Four</option>
+        </select>
+        <select aria-autocomplete=""list"">
+            <option value=""0"">Zero</option>
+            <option value=""1"">One</option>
+            <option value=""2"">Two</option>
+            <option value=""3"">Three</option>
+            <option value=""4"">Four</option>
+        </select>
         ...
-    &lt;/div&gt;
-&lt;/body&gt;
-                                                </code>
-                                            </pre>
-                                </div>
-                            </div>
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        javascript
-                                    </h4>
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                                    <code class="JavaScript">
-angular.module("ucajs", []).controller("MainController", function () {
+    </div>
+</body>",
+               JsExample = @"
+angular.module(""ucajs"", []).controller(""MainController"", function () {
 }); //&lt;-- AngularJs is only needed to model binding! You can use ComboBox without it!
 ...
-$("select").combobox.eq(1).combobox({"onSelectIndexChanged": function (item) {
+$(""select"").combobox.eq(1).combobox({""onSelectIndexChanged"": function (item) {
     alert(JSON.stringify(item));
-}});
-                                                </code>
-                                            </pre>
-                                </div>
-                            </div>
-                        </div>
+}});"
+           })
                     </div>
-                </div>
+                    <div class="accordion-panel">
+                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
+               {
+                   Caption = "Accordion",
+                   ContentPath = "~/Views/Partials/_Accordion.cshtml",
+                   HtmlExample = @"
+<div class=""accordion"">
+    <div class=""accordion-panel"">
+        <div class=""accordion-header"">
+            <h4>Header from html</h4>
+        </div>
+        <div class=""accordion-body"">
+            <div style=""width: 100px; height: 100px; background-color: blue;"" onclick=""alert('I was added from html!');""></div>
+        </div>
+    </div>
+</div>
+<div class=""accordion accordion-horizontal"">
+    <div class=""accordion-panel"">
+        <div class=""accordion-header"">
+            <h4>Horizontal header from html</h4>
+        </div>
+        <div class=""accordion-body"">
+            <div class=""row center-block"">
+                <div style=""width: 100px; height: 100px; background-color: blue;"" onclick=""alert('I was added from html and my header is horizontal!');""></div>
+                <button type=""button"" class=""btn btn-success"" style=""margin-top: 5px;"" onclick=""enablePanel(this)"">Enabled second panel</button>
             </div>
-            <div class="accordion-panel">
-                <div class="accordion-header">
-                    <h4>
-                        Accordion
-                    </h4>
-                </div>
-                <div class="accordion-body">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                Result
-                            </h4>
-                        </div>
-                        <div class="panel-body">
-                            <div class="accordion">
-                                <div class="accordion-panel">
-                                    <div class="accordion-header">
-                                        <h4>
-                                            Header from html
-                                        </h4>
-                                    </div>
-                                    <div class="accordion-body">
-                                        <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html!'); "></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion accordion-horizontal">
-                                <div class="accordion-panel">
-                                    <div class="accordion-header">
-                                        <h4>
-                                            Horizontal header from html
-                                        </h4>
-                                    </div>
-                                    <div class="accordion-body">
-                                        <div class="row center-block">
-                                            <div style="width: 100px; height: 100px; background-color: blue;" onclick=" alert('I was added from html and my header is horizontal!'); "></div>
-                                            <button type="button" class="btn btn-success" style="margin-top: 5px;" onclick=" enablePanel(this) ">Enabled second panel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                Code
-                            </h4>
-                        </div>
-                        <div class="panel-body">
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        html
-                                    </h4>
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                            <code class="html">
-&lt;div class="accordion"&gt;
-    &lt;div class="accordion-panel"&gt;
-        &lt;div class="accordion-header"&gt;
-            &lt;h4&gt;Header from html&lt;/h4&gt;
-        &lt;/div&gt;
-        &lt;div class="accordion-body"&gt;
-            &lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html!');">&lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="accordion accordion-horizontal"&gt;
-    &lt;div class="accordion-panel"&gt;
-        &lt;div class="accordion-header"&gt;
-            &lt;h4&gt;Horizontal header from html&lt;/h4&gt;
-        &lt;/div&gt;
-        &lt;div class="accordion-body"&gt;
-            &lt;div class="row center-block"&gt;
-                &lt;div style="width: 100px; height: 100px; background-color: blue;" onclick="alert('I was added from html and my header is horizontal!');"&gt;&lt;/div&gt;
-                &lt;button type="button" class="btn btn-success" style="margin-top: 5px;" onclick="enablePanel(this)"&gt;Enabled second panel&lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-                                            </code>
-                                        </pre>
-                                </div>
-                            </div>
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        javascript
-                                    </h4>
-                                </div>
-                                <div class="panel-body">
-                                    <pre>
-                                            <code class="JavaScript">
-$(".accordion").accordion("addItems", [{header: "Header from options", body: "&lt;div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"&gt;&lt;/div&gt;"}]).accordion("changeEnabled", {index: 1, enabled: false});
+        </div>
+    </div>
+</div>",
+                   JsExample = @"
+$("".accordion"").accordion(""addItems"", [{header: ""Header from options"", body: ""<div style=\""width: 100px; height: 100px; background-color: red;\"" onclick=\""alert('I was added from options!');\""></div>""}]).accordion(""changeEnabled"", {index: 1, enabled: false});
 function enablePanel(button) {
     var $button = $(button);
-    var accordion = $button.closest(".accordion");
-    accordion.accordion("changeEnabled", { index: 1, enabled: true });
-}
-                                            </code>
-                                        </pre>
-                                </div>
-                            </div>
-                        </div>
+    var accordion = $button.closest("".accordion"");
+    accordion.accordion(""changeEnabled"", { index: 1, enabled: true });
+}"
+               })
+                    </div>
+                    <div class="accordion-panel">
+                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
+                   {
+                       Caption = "Wizard", ContentPath = "~/Views/Partials/_Wizard.cshtml",
+                       HtmlExample = @"
+<div class=""wizard"">
+    <div class=""wizard-page"">
+        <div class=""wizard-header"">
+            <h4>
+                First wizard page
+            </h4>
+        </div>
+        <div class=""wizard-body"">
+            <div>1</div>
+			....
+        </div>
+    </div>
+    <div class=""wizard-page"">
+        <div class=""wizard-header"">
+            <h4>
+                Second wizard page
+            </h4>
+        </div>
+        <div class=""wizard-body"">
+            <div>2</div>
+        </div>
+    </div>
+    <div class=""wizard-page"">
+        <div class=""wizard-header"">
+            <h4>
+                Thierd wizard page
+            </h4>
+        </div>
+        <div class=""wizard-body"">
+            <div>3</div>
+			....
+        </div>
+    </div>
+</div>", JsExample = @"
+$("".wizard"").wizard({height: 200});"
+                   })
                     </div>
                 </div>
-            </div>
-            </div>
             </div>
         </div>
     </div>
@@ -359,14 +206,20 @@ function enablePanel(button) {
             alert(date);
         }});
         $(".accordion:first").accordion({ height: "fill_parent" });
-        $(".accordion:first > .accordion-panel:last > .accordion-body").show();
+        $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").show();
+        $(".wizard").wizard({height: 200});
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });
-        $(".accordion:first > .accordion-panel:last > .accordion-body").hide();
+        $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").hide();
         $("select:lt(2)").combobox().eq(1).combobox({"onSelectIndexChanged": function (item) {
             alert(JSON.stringify(item));
         }
         });
         $("select:eq(2)").combobox({ multiSelect: true });
+        $(".accordion-header").bind("click", function () {
+            setTimeout(function () {
+                $(window).resize();
+            }, 750);
+        });
     });
     function enablePanel(button) {
         var $button = $(button);

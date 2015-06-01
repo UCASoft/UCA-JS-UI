@@ -140,6 +140,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,11 @@
     <Content Include="Scripts\uca.accordion.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Views\Home\Alex.cshtml" />
+    <Content Include="Views\Partials\_ControlView.cshtml" />
+    <Content Include="Views\Partials\_Wizard.cshtml" />
+    <Content Include="Views\Partials\_DatePicker.cshtml" />
+    <Content Include="Views\Partials\_ComboBox.cshtml" />
+    <Content Include="Views\Partials\_Accordion.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -161,7 +167,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

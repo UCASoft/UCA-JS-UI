@@ -13,6 +13,12 @@
                 calendar.empty();
             } else {
                 calendar = $("<table style=\"position: absolute;\"></table>");
+                calendar.focusout(function () {
+                    $.uca.log("focusout");
+                });
+                calendar.blur(function () {
+                    $.uca.log("blur");
+                });
             }
             var monthWidth = 0;
             var span = $("<span></span>");
@@ -89,6 +95,7 @@
                 body.append(tr);
             }
             body.find(".dates").bind("click", function () {
+                $.uca.log("click");
                 var $this = $(this);
                 var input = $this.closest(".input-group").children("input");
                 var date = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), $this.text());
@@ -101,7 +108,7 @@
                     if (data.options.onSelectDateChanged) {
                         data.options.onSelectDateChanged(date);
                     }
-                }
+                }                
                 calendar.toggle("fast", "linear");
             });
             var footer = $("<tfoot><tr><td colspan=\"7\">" + data.options.local.today + "</td></tr></tfoot>");
@@ -110,7 +117,7 @@
             });
             calendar.append(header);
             calendar.append(body);
-            calendar.append(footer);
+            calendar.append(footer);    
             $element.append(calendar);
         },
 
@@ -228,7 +235,11 @@
                         var $item = $(this);
                         var item = { value: $item.attr("value"), text: $item.text(), data: null };
                         data.items[item.value] = item;
-                        ul.append($("<li/>").addClass("presentation").append(self._createItem(item)));
+                        var li = $("<li/>").addClass("presentation");
+                        if (data.options.multiSelect) {
+                            //li.append($("<input type=\"checkbox\"></input>"));
+                        }
+                        ul.append(li.append(self._createItem(item)));
                     });
                     self._bindUlClick(ul, input, hidden, data);
                     cover.append(ul);
@@ -263,7 +274,8 @@
         },
 
         options: {
-            placeholder: "Choose a list item"
+            placeholder: "Choose a list item",
+            multiSelect: false
         }
 
     });
@@ -276,7 +288,7 @@
             var panels = $element.children(".accordion-panel");
             var headers = panels.children(".accordion-header");
             var bodies = panels.children(".accordion-body");
-            var data = $element.data("accordion");
+            var data = this;
 
             var wCorr = this._widthCorrection[panels.length - 1];
             var hCorr = 35;
@@ -456,8 +468,80 @@
         }
     });
 
-    $.plugin("datepicker", $.uca.datepicker);
-    $.plugin("combobox", $.uca.combobox);
-    $.plugin("accordion", $.uca.accordion);
+    $.uca.accordion.subclass("uca.wizard", {
+
+        _resize: function (element) {
+            this._super._resize.call(this, element);
+            var $element = $(element);
+            $element.find(".accordion-body").each(function () {
+                var content = $(this).find("div").first();
+                content.css("height", "100%").height(content.height() - 30 + "px").css("overflow", "auto");
+            });            
+        },
+
+        _init: function (element, options) {
+            var $element = $(element);
+            if ($element.hasClass("wizard")) {
+                $element.addClass("accordion-horizontal");
+                var pages = $element.children(".wizard-page");
+                pages.each(function (index) {
+                    var pageIndex = index;
+                    var $this = $(this);
+                    $this.addClass("accordion-panel");
+                    $this.children(".wizard-header").addClass("accordion-header");
+                    var bodies = $this.children(".wizard-body");
+                    bodies.each(function () {
+                        var $this = $(this);
+                        $this.addClass("accordion-body");
+                        $this.children().wrapAll("<div style=\"overflow: auto; padding: 5px;\" class=\"panel panel-primary\"></div>");
+                        var buttonDiv = $("<div class=\"wizard-button-panel panel panel-primary\"></div>");
+                        if (pageIndex > 0) {
+                            var prevButton = $("<button class=\"wizard-prev-button btn btn-success\">Prev</button>");
+                            prevButton.bind("click", function () {
+                                var $this = $(this);
+                                $this.closest(".wizard-page").prev(".wizard-page").children(".wizard-header").click();
+                            });
+                            if ($this.closest(".wizard-page").prev(".wizard-page").hasClass("disabled")) {
+                                prevButton.addClass("disabled");
+                            }
+                            buttonDiv.append(prevButton);
+                        }
+                        if (pageIndex < pages.length - 1) {
+                            var nextButton = $("<button class=\"wizard-next-button btn btn-success pull-right\">Next</button>");
+                            nextButton.bind("click", function () {
+                                var $this = $(this);
+                                $this.closest(".wizard-page").next(".wizard-page").children(".wizard-header").click();
+                            });
+                            if ($this.closest(".wizard-page").next(".wizard-page").hasClass("disabled")) {
+                                nextButton.addClass("disabled");
+                            }
+                            buttonDiv.append(nextButton);
+                        }
+                        $this.append(buttonDiv);
+                    });
+                });
+                this._super._init.call(this, element, options);
+            }
+        },
+
+        changeEnabled: function (element, options) {
+            this._super.changeEnabled.call(this, element, options);
+            var $element = $(element);
+            var panel = $element.children(".wizard-page").eq(options.index);
+            if (options.enabled) {
+                panel.next(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-prev-button").removeClass("disabled");
+                panel.prev(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-next-button").removeClass("disabled");
+            } else {
+                panel.next(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-prev-button").addClass("disabled");
+                panel.prev(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-next-button").addClass("disabled");
+            }
+        }
+
+    });
+
+    $.uca.plugin("datepicker", $.uca.datepicker);
+    $.uca.plugin("combobox", $.uca.combobox);
+    $.uca.plugin("accordion", $.uca.accordion);
+    $.uca.plugin("wizard", $.uca.wizard);
 
 }(jQuery));

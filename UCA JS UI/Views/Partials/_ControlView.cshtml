@@ -1,0 +1,65 @@
+﻿@model UCA_JS_UI.Models.ControlViewModel
+
+
+<div class="accordion-header">
+    <h4>
+        @Model.Caption
+    </h4>
+</div>
+<div class="accordion-body">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>
+                    Result
+                </h4>
+            </div>
+        </div>
+        <div class="panel-body">
+            @Html.Partial(Model.ContentPath)
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4>
+                    Code
+                </h4>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            html
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <pre>
+                        <code class="html">
+                            @Model.HtmlExample
+                        </code>
+                    </pre>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            javascript
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <pre>
+                        <code class="JavaScript">
+                            @Model.JsExample
+                        </code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
