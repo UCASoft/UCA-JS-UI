@@ -101,7 +101,7 @@
                 var date = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), $this.text());
                 if (!data.selectedDate || data.selectedDate.getTime() !== date.getTime()) {
                     data.selectedDate = date;
-                    input.val(date.toLocaleDateString(data.options.local.name));
+                    input.val(date.toNormalLocaleDateString(data.options.local.name));
                     if ($.uca.angular._isConnected()) {
                         input.change();
                     }
@@ -127,7 +127,25 @@
             var data = $element.data("datepicker");
             var cover = $element;
             cover.addClass("input-group");
-            var input = $("<input type=\"text\" readonly=\"readonly\" class=\"form-control\" />").attr("placeholder", options.placeholder);
+            var input = $("<input type=\"text\" class=\"form-control\" />").attr("placeholder", options.placeholder);
+            if (options.keyboardInput) {
+                input.bind("keyup", function (event) {
+                    var wrongKeys = [16, 17, 18, 19, 20, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 113, 119, 120, 121, 144, 145];
+                    if (wrongKeys.indexOf(event.keyCode) >= 0)
+                        return;
+                    var $this = $(this);
+                    var inputDate = Date.parseWithLocal($this.val(), data.options.local.name);
+                    if (!isNaN(inputDate.getTime())) {
+                        data.selectedDate = inputDate;
+                        self._buildCalendar(element, inputDate);
+                        if (data.options.onSelectDateChanged) {
+                            data.options.onSelectDateChanged(inputDate);
+                        }
+                    }
+                });
+            } else {
+                input.attr("readonly", "readonly");
+            }
             cover.append(input);
             if ($.uca.angular._isConnected() && $element.is("[uca-ng-model]")) {
                 input.attr("ng-model", $element.attr("uca-ng-model"));
@@ -160,7 +178,8 @@
                 months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 weekDays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
                 today: "Today"
-            }
+            },
+            keyboardInput: false
         }
     });
 
@@ -169,7 +188,7 @@
         _bindUlClick: function(ul, input, hidden, data) {
             ul.on("click", "li a", function () {
                 var a = $(this);
-                ul.add("li a").removeClass("selected");
+                ul.find("li a").removeClass("selected");
                 a.addClass("selected");
                 input.val(a.text());
                 hidden.val(a.attr("value"));
@@ -386,9 +405,9 @@
             self._resize(element);
         },
 
-        _togglePanel: function (panel, style) {
+        _togglePanel: function (panel, speed) {
             panel.toggleClass("panel-primary panel-success");
-            panel.children(".accordion-body").toggle(style);
+            panel.children(".accordion-body").toggle(speed);
         },
 
         _init: function (element, options) {
@@ -482,7 +501,8 @@
         _init: function (element, options) {
             var $element = $(element);
             if ($element.hasClass("wizard")) {
-                $element.addClass("accordion-horizontal");
+                options.orientation = "horizontal";
+                $element.addClass("accordion");
                 var pages = $element.children(".wizard-page");
                 pages.each(function (index) {
                     var pageIndex = index;

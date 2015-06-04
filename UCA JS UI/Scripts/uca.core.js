@@ -10,7 +10,34 @@
             var year = this.getFullYear();
             var monthNumber = this.getMonth();
             return (new Date(year, monthNumber + 1, 0)).getDate();
-        }
+        };
+
+        Date['prototype'].toNormalLocaleDateString = function (localName) {
+            return this.toLocaleDateString(localName).replace(/\u200E/g, '');
+        };
+
+        Date.parseWithLocal = function (input, localName) {
+            var complexDate = input.split(Date.getLocalDelimiter(localName));
+            if (complexDate.length === 3) {
+                var mountPosition = Date.getLocalMountPosition(localName);
+                return new Date(complexDate[2], complexDate[mountPosition] - 1, complexDate[mountPosition === 0 ? 1 : 0]);
+            }
+            return new Date(input);
+        };
+
+        Date.getLocalDelimiter = function (localName) {
+            var date = new Date();
+            return date.toNormalLocaleDateString(localName)[2];
+        };
+
+        Date.getLocalMountPosition = function (localName) {
+            var date = new Date(1950, 11, 13);
+            var stringDate = date.toNormalLocaleDateString(localName);
+            if (stringDate.indexOf("13") === 0) {
+                return 1;
+            }
+            return 0;
+        };
     }());
 }
 

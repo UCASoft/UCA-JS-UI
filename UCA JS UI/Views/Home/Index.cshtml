@@ -27,7 +27,11 @@
             <div class="panel-body" id="main-panel">
                 <div class="accordion">
                     <div class="accordion-panel">
-                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel { Caption = "DatePicker", ContentPath = "~/Views/Partials/_DatePicker.cshtml", HtmlExample = @"
+                        @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
+                   {
+                       Caption = "DatePicker",
+                       ContentPath = "~/Views/Partials/_DatePicker.cshtml",
+                       HtmlExample = @"
 <body ng-app=""ucajs"">
     <div ng-controller=""MainController as main"">
         ...<!--AngularJs is only needed to model binding!You can use DatePicker without it!
@@ -39,14 +43,20 @@
         <div class=""datepicker"" style=""margin-top: 15px;""></div>
         ...
     </div>
-</body>", JsExample = @"
+</body>",
+                       JsExample = @"
 angular.module(""ucajs"", []).controller(""MainController"", function () {
 }); //<-- AngularJs is only needed to model binding! You can use DatePicker without it!
 ...
-$("".datepicker"").datepicker().eq(1).datepicker({""onSelectDateChanged"": function (date) {
-    alert(date);
-}});
-" })
+$("".datepicker:eq(0)"").datepicker({
+    keyboardInput: true
+});
+$("".datepicker:eq(1)"").datepicker({
+    ""onSelectDateChanged"": function (date) {
+        alert(date);
+    }
+});
+"})
                     </div>
                     <div class="accordion-panel">
                         @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
@@ -73,6 +83,7 @@ $("".datepicker"").datepicker().eq(1).datepicker({""onSelectDateChanged"": funct
             <option value=""2"">Two</option>
             <option value=""3"">Three</option>
             <option value=""4"">Four</option>
+            <option value=""5"">Five</option>
         </select>
         ...
     </div>
@@ -194,32 +205,31 @@ $("".wizard"").wizard({height: 200});"
         $(window).resize(function () {
             $("#main-panel").height($(window).height() - 115);
         });
-        $(".datepicker").datepicker(/*{
-            local: {
+        $(".datepicker:eq(0)").datepicker({
+            keyboardInput: true
+            /*local: {
                 name: "ru",
                 firstWeekDay: 1,
                 months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
                 weekDays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
                 today: "Сегодня"
-            }
-        }*/).eq(1).datepicker({"onSelectDateChanged": function (date) {
-            alert(date);
-        }});
+            }*/
+        });
+        $(".datepicker:eq(1)").datepicker({
+            "onSelectDateChanged": function (date) {
+                alert(date);
+            }            
+        });
         $(".accordion:first").accordion({ height: "fill_parent" });
-        $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").show();
-        $(".wizard").wizard({height: 200});
+        $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").show();        
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });
+        $(".wizard").wizard({ height: 200 });
         $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").hide();
         $("select:lt(2)").combobox().eq(1).combobox({"onSelectIndexChanged": function (item) {
             alert(JSON.stringify(item));
         }
         });
         $("select:eq(2)").combobox({ multiSelect: true });
-        $(".accordion-header").bind("click", function () {
-            setTimeout(function () {
-                $(window).resize();
-            }, 750);
-        });
     });
     function enablePanel(button) {
         var $button = $(button);
