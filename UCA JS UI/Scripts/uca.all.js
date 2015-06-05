@@ -185,22 +185,64 @@
 
     $.uca.control.subclass("uca.combobox", {
 
-        _bindUlClick: function(ul, input, hidden, data) {
-            ul.on("click", "li a", function () {
+        _resize: function (ul) {
+            var input = ul.find("input");
+            var lis = ul.find("li");
+            if (lis.length === 1) {
+                lis.css("width", "100%");
+                input.css("margin-left", "0");
+            } else {
+                var lastLiWidth = ul.width();
+                ul.children("li").not(":last").each(function () {
+                    var $this = $(this);
+                    lastLiWidth -= $this.width();
+                });
+                ul.find("li:last").css("width", lastLiWidth - 5);
+                input.css("margin-left", "4px");
+            }
+        },
+
+        _bindUlClick: function (ul, input, hidden, data) {
+            var self = this;
+            ul.on("click", "li a", function (e) {
                 var a = $(this);
-                ul.find("li a").removeClass("selected");
-                a.addClass("selected");
-                input.val(a.text());
-                hidden.val(a.attr("value"));
-                if ($.uca.angular._isConnected()) {
-                    input.change();
-                    hidden.change();
-                }
-                var item = data.items[a.attr("value")];
-                if (data.seletedItem !== item) {
-                    data.seletedItem = item;
-                    if (data.options.onSelectIndexChanged) {
-                        data.options.onSelectIndexChanged(item);
+                if (data.options.multiSelect) {
+                    var check = a.find("input");
+                    a.toggleClass("selected");
+                    if (e.target.tagName !== 'INPUT')
+                        check.prop("checked", !check.prop("checked"));
+                    var mainUl = input.closest("ul");
+                    if (a.hasClass("selected")) {
+                        var button = $("<button class=\"btn btn-info\">" + a.text() + "<span class=\"glyphicon glyphicon-remove\"></span></button>");
+                        button.bind("click", function () {
+                            var $this = $(this);
+                            $this.closest("div").find(".dropdown-menu").find("a:contains(" + $this.text() + ")").click();
+                        });
+                        mainUl.children("li:last").before($("<li></li>").append(button));
+                    } else {
+                        mainUl.find("button:contains(" + a.text() + ")").closest("li").remove();
+                    }
+                    self._resize(mainUl);
+                    if (mainUl.find("li").length === 1) {
+                        input.css("margin-left", "0");                        
+                    } else {
+                        input.css("margin-left", "4px");
+                    }
+                } else {
+                    ul.find("li a").removeClass("selected");
+                    a.addClass("selected");
+                    input.val(a.text());
+                    hidden.val(a.attr("value"));
+                    if ($.uca.angular._isConnected()) {
+                        input.change();
+                        hidden.change();
+                    }
+                    var item = data.items[a.attr("value")];
+                    if (data.seletedItem !== item) {
+                        data.seletedItem = item;
+                        if (data.options.onSelectIndexChanged) {
+                            data.options.onSelectIndexChanged(item);
+                        }
                     }
                 }
             });
@@ -226,12 +268,17 @@
             var data = this;
             if ($element[0].tagName === "SELECT") {
                 var $parent = $element.parent();
-                var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));                
-                var input = $("<input type=\"text\" class=\"form-control\" data-toggle=\"dropdown\" />").attr("placeholder", options.placeholder);
+                var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));
+                var input = $("<input type=\"text\" class=\"form-control\" style=\"padding: 0; border: none; height: 32px;\" data-toggle=\"dropdown\" />");
+                if (!options.multiSelect) {
+                    input.attr("placeholder", options.placeholder);
+                }
                 if ($element.attr("aria-autocomplete")) {
                     input.bind("keyup", function () {
                         var text = $(this).val();
-                        var items = $(this).parent().find("ul li");
+                        var cover = $(this).closest("div");
+                        cover.addClass("open");
+                        var items = cover.find("ul:eq(1) li");
                         items.show();
                         if (text !== '') {
                             items.filter(function() {
@@ -242,9 +289,8 @@
                 } else {
                     input.attr("readonly", "readonly");
                 }
-                var hidden = $("<input type=\"text\" style=\"display: none;\" />");
-                cover.append(input);
-                cover.append(hidden);
+                var hidden = $("<input type=\"text\" style=\"display: none;\" />");                
+                cover.append($("<ul class=\"form-control\"></ul>").append($("<li style=\"width: 100%;\"></li>").append(input).append(hidden)));
                 cover.append($("<span class=\"input-group-addon\" data-toggle=\"dropdown\" />").append("<span class=\"caret\" />"));
                 var items = $element.children("option");
                 if (items.length > 0) {
@@ -255,15 +301,12 @@
                         var item = { value: $item.attr("value"), text: $item.text(), data: null };
                         data.items[item.value] = item;
                         var li = $("<li/>").addClass("presentation");
-                        if (data.options.multiSelect) {
-                            //li.append($("<input type=\"checkbox\"></input>"));
-                        }
                         ul.append(li.append(self._createItem(item)));
                     });
                     self._bindUlClick(ul, input, hidden, data);
                     cover.append(ul);
                     cover.bind("click", function () {
-                        ul.css("width", input.width() + 25 + "px");
+                        ul.css("width", cover.children("ul.form-control").width() + 25 + "px");
                     });
                 }
                 $parent.append(cover);                
@@ -279,15 +322,22 @@
                 }
                 $element.css("display", "none");
                 self._bindDropDownScroll(cover);
+                $(window).bind("resize", function () {
+                    self._resize(cover.children("ul.form-control"));
+                });
             }
         },
 
-        _createItem: function(item) {
+        _createItem: function (item) {
+            var data = this;
             var a = $("<a/>").addClass("menuitem").attr("value", item.value);
             if (item.text) {
                 a.text(item.text);
             } else {
                 a.html('&nbsp;');
+            }
+            if (data.options.multiSelect) {
+                a.prepend($("<input type=\"checkbox\"></input>"));
             }
             return a;
         },

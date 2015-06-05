@@ -16,8 +16,32 @@
     transform: rotate(-90deg);
 }
 
-a.selected {
+.dropdown ul.form-control {
+    list-style: none; 
+    padding: 0;
+}
+
+.dropdown ul.form-control li {
+    float: left;
+}
+
+.dropdown li button.btn-info {
+    height: 26px; 
+    padding-top: 3px; 
+    margin-left: 3px; 
+    margin-top: 3px;
+}
+
+.dropdown li button.btn-info span {
+    padding-left: 2px;
+}
+
+.dropdown a.selected {
     background-color: rgb(102, 175, 233);
+}
+
+.dropdown a input {
+    margin-right: 5px !important;
 }
 
 .datepicker .input-group-addon .glyphicon {

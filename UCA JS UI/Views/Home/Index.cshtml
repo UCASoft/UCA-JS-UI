@@ -60,10 +60,10 @@ $("".datepicker:eq(1)"").datepicker({
                     </div>
                     <div class="accordion-panel">
                         @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
-           {
-               Caption = "ComboBox",
-               ContentPath = "~/Views/Partials/_ComboBox.cshtml",
-               HtmlExample = @"
+                   {
+                       Caption = "ComboBox",
+                       ContentPath = "~/Views/Partials/_ComboBox.cshtml",
+                       HtmlExample = @"
 <body ng-app=""ucajs"">
     <div ng-controller=""MainController as main"">
         ... <!--AngularJs is only needed to model binding! You can use ComboBox without it!
@@ -85,17 +85,27 @@ $("".datepicker:eq(1)"").datepicker({
             <option value=""4"">Four</option>
             <option value=""5"">Five</option>
         </select>
+        <select>
+            <option value=""0"">Zero</option>
+            <option value=""1"">One</option>
+            <option value=""2"">Two</option>
+            <option value=""3"">Three</option>
+            <option value=""4"">Four</option>
+            <option value=""5"">Five</option>
+            <option value=""6"">Six</option>
+        </select>
         ...
     </div>
 </body>",
-               JsExample = @"
+                       JsExample = @"
 angular.module(""ucajs"", []).controller(""MainController"", function () {
 }); //&lt;-- AngularJs is only needed to model binding! You can use ComboBox without it!
 ...
-$(""select"").combobox.eq(1).combobox({""onSelectIndexChanged"": function (item) {
+$(""select:lt(2)"").combobox.eq(1).combobox({""onSelectIndexChanged"": function (item) {
     alert(JSON.stringify(item));
-}});"
-           })
+}});
+$(""select:eq(2)"").combobox({ multiSelect: true });"
+                   })
                     </div>
                     <div class="accordion-panel">
                         @Html.Partial("~/Views/Partials/_ControlView.cshtml", new ControlViewModel
@@ -149,7 +159,7 @@ function enablePanel(button) {
         </div>
         <div class=""wizard-body"">
             <div>1</div>
-			....
+            ....
         </div>
     </div>
     <div class=""wizard-page"">
@@ -170,7 +180,7 @@ function enablePanel(button) {
         </div>
         <div class=""wizard-body"">
             <div>3</div>
-			....
+            ....
         </div>
     </div>
 </div>", JsExample = @"
