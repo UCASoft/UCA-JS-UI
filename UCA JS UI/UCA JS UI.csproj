@@ -158,6 +158,7 @@
     <Content Include="Views\Partials\_DatePicker.cshtml" />
     <Content Include="Views\Partials\_ComboBox.cshtml" />
     <Content Include="Views\Partials\_Accordion.cshtml" />
+    <Content Include="Views\Partials\_Grid.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

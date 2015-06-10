@@ -92,3 +92,15 @@
     padding-right: 8px; 
     padding-left: 8px;
 }
+
+.grid-header th {
+    text-align: center;
+}
+
+.grid-body {
+    margin-top: -20px;
+}
+
+.grid-footer {
+    margin-top: -35px;
+}

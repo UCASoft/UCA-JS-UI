@@ -1,5 +1,87 @@
 ﻿(function ($) {
 
+    $.uca.control.subclass("uca.grid", {
+
+        _init: function (element, options) {
+            var $element = $(element);
+            var header = $("<div><table></table></div>").addClass("grid-header");
+            var body = $("<div><table></table></div>").addClass("grid-body");
+            var footer = $("<div></div>").addClass("grid-footer");
+            $element.append(header).append(body).append(footer);
+            var tableData = $element.children("table");
+            if (tableData.length === 1) {
+                var dataHeader = tableData.children("thead");
+                var columns = $("<colgroup></colgroup>");
+                for (var i = 0; i < dataHeader.find("th").length; i++) {
+                    columns.append($("<col style=\"width: 120px;\"/>"));
+                }
+                var workTable = header.children("table").addClass("table table-bordered");
+                workTable.append(columns.clone());
+                dataHeader.children("tr").addClass("active");
+                workTable.append(dataHeader);
+                workTable = body.children("table").addClass("table table-bordered table-striped");
+                workTable.append(columns.clone());
+                var dataBody = tableData.children("tbody");
+                if (options.paging) {
+                    dataBody.children("tr:gt(" + (options.pagesize - 1) + ")").hide();
+                }
+                workTable.append(dataBody);
+                if (options.paging) {
+                    var pageCount = Math.ceil(dataBody.children("tr").length / options.pagesize);
+                    var paginationUl = $("<ul></ul>").addClass("pagination");
+                    var li = $("<li class=\"disabled\"><a href=\"#\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
+                    li.click(function () {
+                        var $this = $(this);
+                        $this.parent().children(".active").prev("li").click();
+                    });
+                    paginationUl.append(li);
+                    for (var j = 1; j <= pageCount; j++) {
+                        li = $("<li><a href=\"#\">" + j + "</a></li>");
+                        if (j === 1) {
+                            li.addClass("active");
+                        }
+                        li.click(function () {
+                            var $this = $(this);
+                            if (!$this.hasClass("active")) {
+                                var pageNumber = $this.children("a").text() * 1;
+                                $this.parent().children("li").removeClass("active");
+                                $this.addClass("active");
+                                var startIndex = (pageNumber - 1) * options.pagesize;
+                                var endIndex = pageNumber * options.pagesize;
+                                $this.closest(".grid-footer").prev(".grid-body").children("table").children("tbody").children("tr").hide().slice(startIndex, endIndex).show();
+                                if (pageNumber === 1) {
+                                    $this.parent().children("li:first").addClass("disabled");
+                                } else {
+                                    $this.parent().children("li:first").removeClass("disabled");
+                                }
+                                if (pageNumber === pageCount) {
+                                    $this.parent().children("li:last").addClass("disabled");
+                                } else {
+                                    $this.parent().children("li:last").removeClass("disabled");
+                                }
+                            }
+                        });
+                        paginationUl.append(li);
+                    }
+                    li = $("<li><a href=\"#\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span></a></li>");
+                    li.click(function () {
+                        var $this = $(this);
+                        $this.parent().children(".active").next("li").click();
+                    });
+                    paginationUl.append(li);
+                    var pagination = $("<nav></nav>").append(paginationUl);
+                    footer.append(pagination);
+                }
+            }
+        },
+
+        options: {
+            paging: false,
+            pagesize: 10
+        }
+
+    });
+
     $.uca.control.subclass("uca.datepicker", {
 
         _buildCalendar: function (element, selectedMonth) {
@@ -219,6 +301,7 @@
                             $this.closest("div").find(".dropdown-menu").find("a:contains(" + $this.text() + ")").click();
                         });
                         mainUl.children("li:last").before($("<li></li>").append(button));
+                        input.val("");
                     } else {
                         mainUl.find("button:contains(" + a.text() + ")").closest("li").remove();
                     }
@@ -269,11 +352,14 @@
             if ($element[0].tagName === "SELECT") {
                 var $parent = $element.parent();
                 var cover = $("<div></div>").addClass("input-group dropdown").attr("style", $element.attr("style")).attr("data-id", $element.attr("id"));
-                var input = $("<input type=\"text\" class=\"form-control\" style=\"padding: 0; border: none; height: 32px;\" data-toggle=\"dropdown\" />");
+                var input = $("<input type=\"text\" class=\"form-control\" style=\"padding: 0; border: none; height: 32px;\" />");
                 if (!options.multiSelect) {
                     input.attr("placeholder", options.placeholder);
                 }
                 if ($element.attr("aria-autocomplete")) {
+                    data.options.autocomplete = $element.attr("aria-autocomplete");
+                }
+                if (data.options.autocomplete !== "none") {
                     input.bind("keyup", function () {
                         var text = $(this).val();
                         var cover = $(this).closest("div");
@@ -281,7 +367,7 @@
                         var items = cover.find("ul:eq(1) li");
                         items.show();
                         if (text !== '') {
-                            items.filter(function() {
+                            items.filter(function () {
                                 return $(this).text().indexOf(text) < 0;
                             }).hide();
                         }
@@ -344,7 +430,8 @@
 
         options: {
             placeholder: "Choose a list item",
-            multiSelect: false
+            multiSelect: false,
+            autocomplete: "none"
         }
 
     });
@@ -613,5 +700,6 @@
     $.uca.plugin("combobox", $.uca.combobox);
     $.uca.plugin("accordion", $.uca.accordion);
     $.uca.plugin("wizard", $.uca.wizard);
+    $.uca.plugin("grid", $.uca.grid);
 
 }(jQuery));
