@@ -17,7 +17,11 @@
                 }
                 var workTable = header.children("table").addClass("table table-bordered");
                 workTable.append(columns.clone());
-                dataHeader.children("tr").addClass("active");
+                var headerRow = dataHeader.children("tr");
+                headerRow.addClass("active");
+                headerRow.children("th").html(function () {
+                    return $("<span></span>").append($(this).html());
+                });
                 workTable.append(dataHeader);
                 workTable = body.children("table").addClass("table table-bordered table-striped");
                 workTable.append(columns.clone());
