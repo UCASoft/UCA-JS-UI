@@ -20,6 +20,9 @@
         /// </summary>
         public string HtmlExample { get; set; }
 
+        /// <summary>
+        /// Gets or sets the js example.
+        /// </summary>
         public string JsExample { get; set; }
     }
 }

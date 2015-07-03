@@ -657,7 +657,8 @@
                         $this.children().wrapAll("<div style=\"overflow: auto; padding: 5px;\" class=\"panel panel-primary\"></div>");
                         var buttonDiv = $("<div class=\"wizard-button-panel panel panel-primary\"></div>");
                         if (pageIndex > 0) {
-                            var prevButton = $("<button class=\"wizard-prev-button btn btn-success\">Prev</button>");
+                            var prevButton = $("<button class=\"wizard-prev-button btn btn-success\"></button>");
+                            prevButton.text(options.local.captions.buttons.prev);
                             prevButton.bind("click", function () {
                                 var $this = $(this);
                                 $this.closest(".wizard-page").prev(".wizard-page").children(".wizard-header").click();
@@ -668,7 +669,8 @@
                             buttonDiv.append(prevButton);
                         }
                         if (pageIndex < pages.length - 1) {
-                            var nextButton = $("<button class=\"wizard-next-button btn btn-success pull-right\">Next</button>");
+                            var nextButton = $("<button class=\"wizard-next-button btn btn-success pull-right\"></button>");
+                            nextButton.text(options.local.captions.buttons.next);
                             nextButton.bind("click", function () {
                                 var $this = $(this);
                                 $this.closest(".wizard-page").next(".wizard-page").children(".wizard-header").click();
@@ -695,6 +697,17 @@
             } else {
                 panel.next(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-prev-button").addClass("disabled");
                 panel.prev(".wizard-page").children(".wizard-body").children(".wizard-button-panel").find(".wizard-next-button").addClass("disabled");
+            }
+        },
+
+        options: {
+            local: {
+                captions: {
+                    buttons: {
+                        next: "Next",
+                        prev: "Prev"
+                    }
+                }
             }
         }
 

@@ -247,7 +247,7 @@ $("".wizard"").wizard({height: 200});" })
         $(".accordion:first").accordion({ height: "fill_parent" });
         $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").show();        
         $(".accordion:gt(0)").accordion("addItems", [{ header: "Header from options", body: "<div style=\"width: 100px; height: 100px; background-color: red;\" onclick=\"alert('I was added from options!');\"></div>" }]).accordion("changeEnabled", { index: 1, enabled: false });
-        $(".wizard").wizard({ height: 200 });
+        $(".wizard").wizard({ height: 200/*, local: { captions: { buttons: { prev: "Назад", next: "Далее" } } }*/ });
         $(".accordion:first > .accordion-panel:gt(1) > .accordion-body").hide();
         $("select:lt(2)").combobox().eq(1).combobox({"onSelectIndexChanged": function (item) {
             alert(JSON.stringify(item));
